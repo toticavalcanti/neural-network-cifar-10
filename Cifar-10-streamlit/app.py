@@ -49,7 +49,7 @@ if image_file  is not None:
 if st.button("Predict"):
     image = Image.open(image_file)
     st.image(image , use_column_width=True)
-    img = image.save(f"images/"+image_file.name)
+    img = image.save(f"./images/"+image_file.name)
     img_to_predict = load_image("./images/"+image_file.name)
     predictions = np.argmax(model.predict(img_to_predict), axis=-1)
     string = "Image mostly same as : - " + class_name[predictions[0]]
