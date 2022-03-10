@@ -2,7 +2,7 @@
 import os
 import cv2
 import numpy as np 
-from PIL import Image, ImageOps
+from PIL import Image , ImageOps
 import streamlit as st
 from tensorflow.keras.models import load_model
 from keras.preprocessing.image import img_to_array, load_img
@@ -24,9 +24,6 @@ st.title("Image Classification with Cifar10 Dataset")
 st.header("Please Upload images related to this things...")
 st.text(class_name)
 
-# create a file uploader and take a image as an jpg or png
-file = st.file_uploader("Upload the image" , type=["jpg" , "png"])
-
 # load and prepare the image
 def load_image(filename):
     # load the image
@@ -40,14 +37,20 @@ def load_image(filename):
     img = img / 255.0
     return img
 
-if st.button("Predict"):
-    image = Image.open(file)
-    st.image(image , use_column_width=True)
-    
-    img = load_image("./images/"+file.name)
-    predictions = np.argmax(model.predict(img), axis=-1)
+# create a file uploader and take a image as an jpg or png
+image_file  = st.file_uploader("Upload the image" , type=["jpg" , "png"])
+if image_file  is not None:
+    file_details = {
+        "Filename":image_file.name,
+        "FileType":image_file.type,
+        "FileSize":image_file.size,
+    }
 
-    class_name = ["airplane", "automobile" , "bird" , "cat" , "deer" , "dog" , "frog" , "horse" , "ship" , "truck"]
-    print(class_name[np.argmax(predictions)])
+if st.button("Predict"):
+    image = Image.open(image_file)
+    st.image(image , use_column_width=True)
+    img = image.save(f"images/"+image_file.name)
+    img_to_predict = load_image("./images/"+image_file.name)
+    predictions = np.argmax(model.predict(img_to_predict), axis=-1)
     string = "Image mostly same as : - " + class_name[predictions[0]]
     st.success(string)
