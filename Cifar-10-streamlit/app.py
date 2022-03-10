@@ -2,7 +2,7 @@
 import os
 import cv2
 import numpy as np 
-from PIL import Image , ImageOps
+from PIL import Image, ImageOps
 import streamlit as st
 from tensorflow.keras.models import load_model
 from keras.preprocessing.image import img_to_array, load_img
